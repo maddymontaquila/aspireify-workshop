@@ -55,3 +55,13 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Node.js
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+
+# Aspire generated output
+.aspire/
+aspire-output/
