@@ -2,8 +2,6 @@ import { createBuilder } from './.aspire/modules/aspire.mjs';
 
 const builder = await createBuilder();
 
-const adminPassword = await builder.addParameter('admin-password', { secret: true });
-
 const cache = await builder.addRedis('cache');
 
 const postgres = await builder
@@ -13,7 +11,7 @@ const db = await postgres.addDatabase('db');
 
 const migrations = await builder
   .addProject('migrations', '../../../start/src/BingoBoard.MigrationService/BingoBoard.MigrationService.csproj')
-  .withEnvironment('Authentication__AdminPassword', adminPassword)
+  .withEnvironment('Authentication__AdminPassword', 'admin')
   .withReference(db)
   .waitFor(db);
 

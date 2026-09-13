@@ -1,0 +1,100 @@
+#:sdk Aspire.AppHost.Sdk@13.5.3
+#:property AspireUseCliBundle=true
+#:package Aspire.Hosting.PostgreSQL@13.5.3
+#:package Aspire.Hosting.Redis@13.5.3
+#:package Aspire.Hosting.JavaScript@13.5.3
+#:project ../../../start/src/BingoBoard.Admin/BingoBoard.Admin.csproj
+#:project ../../../start/src/BingoBoard.MigrationService/BingoBoard.MigrationService.csproj
+
+using System.Net.Http.Json;
+using Aspire.Hosting.ApplicationModel;
+
+var builder = DistributedApplication.CreateBuilder(args);
+
+var adminPassword = builder.AddParameter("admin-password", secret: true);
+
+var cache = builder.AddRedis("cache");
+
+var db = builder.AddPostgres("postgres")
+    .WithDataVolume()
+    .AddDatabase("db");
+
+var migrations = builder.AddProject<Projects.BingoBoard_MigrationService>("migrations")
+    .WithEnvironment("Authentication__AdminPassword", adminPassword)
+    .WithReference(db)
+    .WaitFor(db);
+
+var admin = builder.AddProject<Projects.BingoBoard_Admin>("boardadmin")
+    .WithEnvironment("Authentication__AdminPassword", adminPassword)
+    .WithReference(cache)
+    .WithReference(db)
+    .WaitFor(cache)
+    .WaitForCompletion(migrations)
+    .WithExternalHttpEndpoints()
+    .WithIconName("Trophy")
+    .WithUrl("/", "Admin home")
+    .WithUrl("/board-management", "Manage board")
+    .WithUrl("/squares-management", "Manage squares")
+    .WithHttpCommand(
+        path: "/api/demo/producer/squares/import",
+        displayName: "Add bingo square",
+        commandName: "add-bingo-square",
+        commandOptions: new HttpCommandOptions
+        {
+            Method = HttpMethod.Post,
+            Description = "Add or update a square through the admin application's developer API.",
+            ConfirmationMessage = "Add this square to the bingo board?",
+            IconName = "AddSquare",
+            IsHighlighted = true,
+            ResultMode = HttpCommandResultMode.Auto,
+            Arguments =
+            [
+                new InteractionInput
+                {
+                    Name = "id",
+                    Label = "Square ID",
+                    InputType = InputType.Text,
+                    Required = true,
+                    MaxLength = 100
+                },
+                new InteractionInput
+                {
+                    Name = "label",
+                    Label = "Square text",
+                    InputType = InputType.Text,
+                    Required = true,
+                    MaxLength = 200
+                },
+                new InteractionInput
+                {
+                    Name = "category",
+                    Label = "Category",
+                    InputType = InputType.Text,
+                    Value = "workshop",
+                    MaxLength = 50
+                }
+            ],
+            PrepareRequest = context =>
+            {
+                context.Request.Content = JsonContent.Create(new[]
+                {
+                    new
+                    {
+                        Id = context.Arguments.GetString("id")!,
+                        Label = context.Arguments.GetString("label")!,
+                        Type = context.Arguments.GetString("category"),
+                        IsActive = true
+                    }
+                });
+
+                return Task.CompletedTask;
+            }
+        });
+
+builder.AddViteApp("bingoboard", "../../../start/src/bingo-board")
+    .WithEnvironment("BINGO_ADMIN_URL", admin.GetEndpoint("http"))
+    .WithReference(admin)
+    .WithUrl("/", "Play bingo")
+    .WaitFor(admin);
+
+builder.Build().Run();

@@ -8,8 +8,6 @@
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var adminPassword = builder.AddParameter("admin-password", secret: true);
-
 var cache = builder.AddRedis("cache");
 
 var db = builder.AddPostgres("postgres")
@@ -17,7 +15,7 @@ var db = builder.AddPostgres("postgres")
     .AddDatabase("db");
 
 var migrations = builder.AddProject<Projects.BingoBoard_MigrationService>("migrations")
-    .WithEnvironment("Authentication__AdminPassword", adminPassword)
+    .WithEnvironment("Authentication__AdminPassword", "admin")
     .WithReference(db)
     .WaitFor(db);
 
@@ -32,7 +30,6 @@ builder.AddViteApp("bingoboard", "../../../start/src/bingo-board")
     .WithEnvironment("BINGO_ADMIN_URL", admin.GetEndpoint("http"))
     .WithReference(admin)
     .WithUrl("/admin", "admin")
-    .with
     .WaitFor(admin);
 
 builder.Build().Run();
