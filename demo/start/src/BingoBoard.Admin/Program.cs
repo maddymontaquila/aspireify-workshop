@@ -9,6 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var useServiceDefaults = builder.Configuration.GetValue<bool>("Aspire:UseServiceDefaults");
+
+if (useServiceDefaults)
+{
+    builder.AddServiceDefaults();
+}
 
 var databaseConnection = builder.Configuration.GetConnectionString("db")
     ?? throw new InvalidOperationException("Connection string 'db' is required.");
@@ -116,5 +122,10 @@ app.MapHub<BingoHub>("/bingohub");
 app.MapAuthenticationEndpoints();
 
 app.MapGet("/api/version-info", (AppVersionInfoProvider versionInfoProvider) => versionInfoProvider.GetVersionInfo());
+
+if (useServiceDefaults)
+{
+    app.MapDefaultEndpoints();
+}
 
 app.Run();

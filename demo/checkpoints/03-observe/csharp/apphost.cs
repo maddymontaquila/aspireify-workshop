@@ -21,11 +21,13 @@ var db = builder.AddPostgres("postgres")
 
 var migrations = builder.AddProject<Projects.BingoBoard_MigrationService>("migrations")
     .WithEnvironment("Authentication__AdminPassword", adminPassword)
+    .WithEnvironment("Aspire__UseServiceDefaults", "true")
     .WithReference(db)
     .WaitFor(db);
 
 var admin = builder.AddProject<Projects.BingoBoard_Admin>("boardadmin")
     .WithEnvironment("Authentication__AdminPassword", adminPassword)
+    .WithEnvironment("Aspire__UseServiceDefaults", "true")
     .WithReference(cache)
     .WithReference(db)
     .WaitFor(cache)
@@ -95,6 +97,7 @@ var frontend = builder.AddViteApp("bingoboard", "../../../start/src/bingo-board"
     .WithEnvironment("BINGO_ADMIN_URL", admin.GetEndpoint("http"))
     .WithReference(admin)
     .WithUrl("/", "Play bingo")
+    .WithHttpHealthCheck("/")
     .WaitFor(admin);
 
 frontend.WithCommand(

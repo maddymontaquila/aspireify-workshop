@@ -5,6 +5,7 @@ This checkpoint turns the first AppHost into a tailored developer experience. Bo
 - A secret parameter shared by the migration worker and admin portal
 - A custom icon for the admin resource
 - Named dashboard URLs for playing and managing the game
+- A regular AppHost command that generates a facilitator cheat sheet
 - An interactive HTTP command that adds a square through the admin API
 - Structured command output showing what the API changed
 
@@ -13,4 +14,4 @@ Choose either:
 - [`csharp`](csharp/README.md) for a C# file-based AppHost.
 - [`typescript`](typescript/README.md) for a TypeScript AppHost.
 
-The HTTP command targets a development-only endpoint in the admin application. Aspire renders its arguments as a dashboard form and also exposes them as options through `aspire resource`.
+The **Generate demo links** command runs entirely in the AppHost and inspects Aspire's allocated endpoints. The **Add bingo square** HTTP command targets a development-only endpoint in the admin application. Aspire renders its arguments as a dashboard form and also exposes both commands through `aspire resource`.

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BingoBoard.Data\BingoBoard.Data.csproj" />
+    <ProjectReference Include="..\BingoBoard.ServiceDefaults\BingoBoard.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

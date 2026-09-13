@@ -1,8 +1,16 @@
 using BingoBoard.MigrationService;
 using BingoBoard.Data;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Trace;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+if (builder.Configuration.GetValue<bool>("Aspire:UseServiceDefaults"))
+{
+    builder.AddServiceDefaults();
+    builder.Services.AddOpenTelemetry()
+        .WithTracing(tracing => tracing.AddSource(Worker.ActivitySourceName));
+}
 
 builder.Services.AddHostedService<Worker>();
 

@@ -19,12 +19,14 @@ const db = await postgres.addDatabase('db');
 const migrations = await builder
   .addProject('migrations', '../../../start/src/BingoBoard.MigrationService/BingoBoard.MigrationService.csproj')
   .withEnvironment('Authentication__AdminPassword', adminPassword)
+  .withEnvironment('Aspire__UseServiceDefaults', 'true')
   .withReference(db)
   .waitFor(db);
 
 const admin = await builder
   .addProject('boardadmin', '../../../start/src/BingoBoard.Admin/BingoBoard.Admin.csproj')
   .withEnvironment('Authentication__AdminPassword', adminPassword)
+  .withEnvironment('Aspire__UseServiceDefaults', 'true')
   .withReference(cache)
   .withReference(db)
   .waitFor(cache)
@@ -93,6 +95,7 @@ const frontend = await builder
   .withEnvironment('BINGO_ADMIN_URL', await admin.getEndpoint('http'))
   .withReference(admin)
   .withUrl('/', { displayText: 'Play bingo' })
+  .withHttpHealthCheck({ path: '/' })
   .waitFor(admin);
 
 await frontend.withCommand(

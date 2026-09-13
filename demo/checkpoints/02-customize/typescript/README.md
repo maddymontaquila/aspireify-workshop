@@ -22,10 +22,13 @@ In the dashboard:
 1. Use **Play bingo**, **Manage board**, and **Manage squares** to open named application views.
 2. Open the `boardadmin` resource commands.
 3. Run **Add bingo square**, fill in the form, and inspect the structured API response.
+4. Open the `bingoboard` commands and run **Generate demo links** to see a regular AppHost callback command.
 
-The same command is available from the CLI:
+Both commands are available from the CLI:
 
 ```bash
+aspire resource bingoboard demo-links
+
 aspire resource boardadmin add-bingo-square \
   --id "workshop-demo" \
   --label "Someone says distributed monolith" \

@@ -13,8 +13,11 @@ start/
     ├── BingoBoard.Admin/             # Blazor admin portal and SignalR hub
     ├── BingoBoard.Data/              # EF Core model and migrations
     ├── BingoBoard.MigrationService/  # One-shot migration and seed worker
+    ├── BingoBoard.ServiceDefaults/   # Shared defaults enabled by checkpoint 03
     └── bingo-board/                  # Vue/Vite player frontend
 ```
+
+`BingoBoard.ServiceDefaults` is present because every checkpoint shares this source tree. It remains inactive in the starting application and the first two checkpoints; checkpoint 03 enables it through configuration.
 
 The running application has five resources:
 
