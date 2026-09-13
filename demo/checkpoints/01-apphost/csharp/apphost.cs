@@ -31,6 +31,8 @@ var admin = builder.AddProject<Projects.BingoBoard_Admin>("boardadmin")
 builder.AddViteApp("bingoboard", "../../../start/src/bingo-board")
     .WithEnvironment("BINGO_ADMIN_URL", admin.GetEndpoint("http"))
     .WithReference(admin)
+    .WithUrl("/admin", "admin")
+    .with
     .WaitFor(admin);
 
 builder.Build().Run();
