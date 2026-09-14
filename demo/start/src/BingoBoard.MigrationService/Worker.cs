@@ -129,21 +129,20 @@ public class Worker(
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            // Only seed if the table is empty.
-            if (await dbContext.BingoSquares.AnyAsync(cancellationToken))
-            {
-                logger.LogInformation("Bingo squares already seeded, skipping...");
-                return;
-            }
-
-            logger.LogInformation("Seeding bingo squares...");
-
             await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
 
             var defaultSquares = GetDefaultBingoSquares();
-            var order = 0;
+            var existingIds = await dbContext.BingoSquares
+                .Select(square => square.Id)
+                .ToHashSetAsync(cancellationToken);
+            var nextDisplayOrder = await dbContext.BingoSquares
+                .Select(square => (int?)square.DisplayOrder)
+                .MaxAsync(cancellationToken) ?? -1;
+            var missingSquares = defaultSquares
+                .Where(square => !existingIds.Contains(square.Id))
+                .ToList();
 
-            foreach (var square in defaultSquares)
+            foreach (var square in missingSquares)
             {
                 dbContext.BingoSquares.Add(new BingoSquareEntity
                 {
@@ -151,7 +150,7 @@ public class Worker(
                     Label = square.Label,
                     Type = square.Type,
                     IsActive = true,
-                    DisplayOrder = order++,
+                    DisplayOrder = ++nextDisplayOrder,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 });
@@ -160,7 +159,10 @@ public class Worker(
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
 
-            logger.LogInformation("Seeded {Count} bingo squares", defaultSquares.Count);
+            logger.LogInformation(
+                "Seeded {AddedCount} missing bingo squares; {ExistingCount} already existed.",
+                missingSquares.Count,
+                existingIds.Count);
         });
     }
 
