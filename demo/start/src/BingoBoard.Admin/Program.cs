@@ -101,6 +101,11 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Bingo Board Admin API");
+        options.RoutePrefix = "swagger";
+    });
     app.MapProducerEndpoints();
 }
 
