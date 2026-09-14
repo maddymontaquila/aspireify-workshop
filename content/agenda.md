@@ -8,14 +8,14 @@ The workshop follows one progression:
 
 | Day | Workshop block | Theme |
 |---|---|---|
-| Day 1 | 09:00–10:15 | **See your system:** understand Aspire and map the stack |
-| Day 1 | 10:30–12:00 | **Get it running:** create the first Aspire model |
-| Day 1 | 13:00–15:15 | **Make it useful and repeatable:** add dependencies, configuration, reliability, and custom resource commands |
-| Day 1 | 15:30–17:00 | **Understand and harden it:** observe, debug, recover, and finish the slice |
+| Day 1 | 09:00–10:15 | **Model your system:** understand Aspire and map the stack |
+| Day 1 | 10:30–12:00 | **Get it running:** scaffold the AppHost and run the first resource |
+| Day 1 | 13:00–15:15 | **Make it yours:** configure, identify, and act through a tailored developer experience |
+| Day 1 | 15:30–17:00 | **Understand and observe it:** add telemetry and meaningful health signals |
 | Day 2 | 09:00–10:15 | **Agentic Power Hour:** give an AI coding agent the context to operate the stack |
 | Day 2 | 10:30–12:00 | **Package and ship it:** publish and deploy with Docker Compose |
-| Day 2 | 13:00–15:15 | **Make it production-shaped:** target environments and purposeful customization |
-| Day 2 | 15:40–17:00 | **Show, ask, and wrap:** attendee demos, parking-lot Q&A, and optional final help |
+| Day 2 | 13:00–15:15 | **Tweak its production shape:** target environments and purposeful customization |
+| Day 2 | 15:40–17:00 | **Show-and-tell, Q+A, and wrap:** attendee demos, parking-lot questions, and optional final help |
 
 Each block is a mini-workshop:
 
@@ -59,13 +59,13 @@ The workshop stays polyglot, cloud-neutral, and centered on attendee application
 | Time | Session | Outcome and hands-on checkpoint |
 |---|---|---|
 | 08:00–09:00 | Breakfast | NDC breakfast; no workshop content scheduled. |
-| 09:00–10:15 | **See your system:** understand Aspire and map the stack | Introduce the workshop workflow and the essential Aspire mental model: AppHost, resources, references, endpoints, orchestration, and the distinction between running and deploying. Map the sample application together, then have attendees inventory their own stack and choose one achievable vertical slice. **Open lab:** create and review each attendee's first resource graph. |
+| 09:00–10:15 | **Model your system:** understand Aspire and map the stack | Set expectations for an interactive workshop, define what it means to Aspireify a stack, and introduce Aspire's main parts: the AppHost, integrations, dashboard, and CLI. Build the app-model mental model from resources, relationships, endpoints, readiness, and the distinction between development and deployment representations. Map the sample application together. **Open lab:** attendees inventory their own stack, identify today's pain points, choose an achievable vertical slice, and share its first resource graph. |
 | 10:15–10:30 | Morning break |  |
-| 10:30–12:00 | **Get it running:** create the first Aspire model | Run `aspire init`, choose an AppHost style, and demonstrate how existing projects, executables, JavaScript/Python apps, and containers enter the resource model. Add the first endpoints, references, and startup dependency. Include the agent-assisted Aspireify path while explaining the generated result. **Open lab:** attendees create their AppHost and get at least one application service running through Aspire. |
+| 10:30–12:00 | **Get it running:** scaffold the AppHost and run the first resource | Install and inspect the Aspire CLI, distinguish `aspire new` from `aspire init`, and use `aspire add` to discover integrations. Explain how AppHost resources are assigned to variables and customized through common resource APIs, resource-type capabilities, and integration-specific methods. Demonstrate the core run lifecycle with `aspire run`, `start`, `ps`, and `stop`, including isolated execution. **Open lab:** attendees initialize an AppHost and get the simplest possible vertical slice—even an initially broken frontend—running through Aspire. |
 | 12:00–13:00 | Lunch |  |
-| 13:00–15:15 | **Make it useful and repeatable:** dependencies, configuration, and reliability | Extend the first service into a useful vertical slice by adding databases, caches, queues, containers, or external services. Cover references, service discovery, connection information, parameters, secrets, environment variables, persistence, `WaitFor`, health checks, resource lifecycle, and custom commands that replace repeated developer scripts or README steps. Discuss what belongs in the AppHost versus application or environment configuration. **Open lab:** attendees connect a real dependency, expose one useful workflow where appropriate, remove manual startup or connection-string steps, and prove the slice can restart cleanly. |
+| 13:00–15:15 | **Make it yours:** customize the developer experience | Frame Aspirification as building and shipping an IDE for the application's development workflow. Use **Configure, Identify, Act** to make setup explicit, create a self-describing system, and turn instructions into actions. Cover lifetimes, arguments and startup, persistent volumes and bind mounts, parameters, named URLs, icons, parent-child relationships, regular commands, and HTTP commands. **Open lab:** attendees customize their AppHost around a real onboarding pain point or repetitive task, then share the most useful developer-experience improvement. |
 | 15:15–15:30 | Afternoon break |  |
-| 15:30–17:00 | **Understand and harden it:** observe, debug, recover, and finish the slice | Use the resource view, console and structured logs, traces, and metrics to follow a request across services. Introduce a failure, diagnose it from runtime evidence, and improve health checks, startup ordering, configuration, or recovery behavior where needed. **Open lab:** attendees investigate and harden their own application, close Day 1 gaps, and leave the selected slice running or with a clearly evidenced blocker. |
+| 15:30–17:00 | **Understand and observe it:** wire OpenTelemetry and health checks | Introduce OpenTelemetry as the vendor-neutral standard for logs, traces, and metrics, then show the small one-time instrumentation needed to send OTLP data to the Aspire dashboard. For .NET, add the ServiceDefaults template and explain the telemetry, service discovery, resilience, and health-check defaults it supplies. Distinguish service readiness and liveness signals from AppHost resource health checks, including the need to explicitly connect an endpoint with `WithHttpHealthCheck(...)`. **Open lab:** attendees wire telemetry and a meaningful health signal into their slice, inspect runtime evidence in the dashboard, and share an interesting trace. |
 
 ---
 
@@ -80,10 +80,10 @@ The workshop stays polyglot, cloud-neutral, and centered on attendee application
 | 10:15–10:30 | Morning break |  |
 | 10:30–12:00 | **Package and ship it:** publish and deploy with Docker Compose | Move from run mode to publish and deploy mode. Add a Docker Compose environment, inspect generated artifacts and pipeline steps, and discuss images, networking, environment values, persistent data, and resources that need a different production representation. Use Docker or Podman according to attendee environments. **Open lab:** attendees publish or deploy their modeled slice and inspect what Aspire produced. |
 | 12:00–13:00 | Lunch |  |
-| 13:00–15:15 | **Make it production-shaped:** target environments and purposeful customization | Show how the same application model maps to a real target without implying that Aspire removes infrastructure decisions. Select the most relevant deployment path for the room and cover environments, existing or managed resources, identity and secrets, persistence, ingress, CI/CD boundaries, and cleanup. Demonstrate environment-specific modeling and how to extend or replace resource behavior only where the production target requires it. **Open lab:** attendees complete a local-to-production gap analysis and adapt one part of their model for its intended target. |
+| 13:00–15:15 | **Tweak its production shape:** target environments and purposeful customization | Show how the same application model maps to a real target without implying that Aspire removes infrastructure decisions. Select the most relevant deployment path for the room and cover environments, existing or managed resources, identity and secrets, persistence, ingress, CI/CD boundaries, and cleanup. Demonstrate environment-specific modeling and how to extend or replace resource behavior only where the production target requires it. **Open lab:** attendees complete a local-to-production gap analysis and adapt one part of their model for its intended target. |
 | 15:15–15:30 | Afternoon break |  |
 | 15:30–15:40 | Workshop evaluation | Required organizer slot. |
-| 15:40–17:00 | **Show, ask, and wrap:** attendee demos, parking-lot Q&A, and optional final help | Keep the final block intentionally light. Start with short attendee demos focused on what they Aspireified, what improved, and what they learned—not polished presentations. Use the remaining group energy to answer open questions and address the highest-value items collected in the parking lot across both days. Close the formal workshop with key resources and a simple next-step prompt. Use any remaining time as optional office hours, individual troubleshooting, or informal show-and-tell rather than introducing another major topic. |
+| 15:40–17:00 | **Show-and-tell, Q+A, and wrap:** attendee demos, parking-lot questions, and optional final help | Keep the final block intentionally light. Start with short attendee demos focused on what they Aspireified, what improved, and what they learned—not polished presentations. Use the remaining group energy to answer open questions and address the highest-value items collected in the parking lot across both days. Close the formal workshop with key resources and a simple next-step prompt. Use any remaining time as optional office hours, individual troubleshooting, or informal show-and-tell rather than introducing another major topic. |
 
 ---
 
@@ -110,11 +110,12 @@ The workshop stays polyglot, cloud-neutral, and centered on attendee application
 ## Initial content build order
 
 1. The evolving sample application and its before-Aspire startup experience.
-2. Day 1 resource-model walkthrough and first Aspirification exercise.
-3. Dependency/configuration exercise and planted startup failure.
-4. Observability investigation that uses logs and a distributed trace.
-5. Docker Compose publish/deploy exercise and artifact review.
-6. Production gap-analysis worksheet.
-7. Agentic Power Hour setup, failure scenario, prompts, and evidence-based debugging exercise.
-8. Production-target adaptation and optional parking-lot topic modules.
-9. Attendee demo prompts, final next-step prompt, and facilitator troubleshooting notes.
+2. Day 1 resource-model walkthrough and application-mapping exercise.
+3. AppHost initialization, first-resource demo, and simplest-slice exercise.
+4. Configure/Identify/Act customization demo and developer-experience exercise.
+5. ServiceDefaults, health-check, and OpenTelemetry exercise using dashboard evidence.
+6. Docker Compose publish/deploy exercise and artifact review.
+7. Production gap-analysis worksheet.
+8. Agentic Power Hour setup, failure scenario, prompts, and evidence-based debugging exercise.
+9. Production-target adaptation and optional parking-lot topic modules.
+10. Attendee demo prompts, final next-step prompt, and facilitator troubleshooting notes.
