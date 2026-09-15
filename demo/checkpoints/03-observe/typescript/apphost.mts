@@ -31,6 +31,7 @@ const admin = await builder
   .withReference(db)
   .waitFor(cache)
   .waitForCompletion(migrations)
+  .withHttpHealthCheck({ path: '/health' })
   .withExternalHttpEndpoints()
   .withIconName('Trophy')
   .withUrl('/', { displayText: 'Admin home' })

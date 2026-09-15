@@ -6,11 +6,11 @@ import { readFileSync } from 'fs'
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'))
 const viteVersion = packageJson.devDependencies.vite.replace('^', '')
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const adminUrl = env.BINGO_ADMIN_URL
 
-  if (!adminUrl) {
+  if (command === 'serve' && !adminUrl) {
     throw new Error('BINGO_ADMIN_URL is required. Copy .env.example to .env before starting Vite.')
   }
 

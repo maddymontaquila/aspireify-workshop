@@ -73,6 +73,8 @@ The workshop stays polyglot, cloud-neutral, and centered on attendee application
 
 **Day 2 milestone:** each attendee can explain how their Aspire application model maps toward deployment and leaves with one advanced improvement plus a prioritized next-step plan.
 
+The [Day 1 stopping-point checklist](../demo/checkpoints/03-observe/README.md#day-1-finish-line) defines the starting state. [Day 2 content and exercises](day-2.md) expands each block into timings, facilitator material, bounded labs, success checks, and fallback paths, with implementation status called out explicitly.
+
 | Time | Session | Outcome and hands-on checkpoint |
 |---|---|---|
 | 08:00–09:00 | Breakfast | NDC breakfast; no workshop content scheduled. |

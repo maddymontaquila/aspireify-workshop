@@ -5,6 +5,7 @@ Materials for the Aspireify Your Stack workshop, first given at NDC Oslo 2026.
 ## Workshop materials
 
 - [Agenda](content/agenda.md)
+- [Day 2 content and exercises](content/day-2.md)
 - [Demo application](demo/README.md)
 
 ## Prerequisites

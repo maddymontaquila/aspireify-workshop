@@ -25,18 +25,29 @@ var migrations = builder.AddProject<Projects.BingoBoard_MigrationService>("migra
     .WithReference(db)
     .WaitFor(db);
 
-var admin = builder.AddProject<Projects.BingoBoard_Admin>("boardadmin")
+var admin = builder.AddProject<Projects.BingoBoard_Admin>("boardadmin", launchProfileName: "http")
     .WithEnvironment("Authentication__AdminPassword", adminPassword)
     .WithEnvironment("Aspire__UseServiceDefaults", "true")
     .WithReference(cache)
     .WithReference(db)
     .WaitFor(cache)
     .WaitForCompletion(migrations)
+    .WithHttpHealthCheck("/health")
     .WithExternalHttpEndpoints()
     .WithIconName("Trophy")
     .WithUrl("/", "Admin home")
     .WithUrl("/board-management", "Manage board")
     .WithUrl("/squares-management", "Manage squares")
+    .WithHttpCommand(
+        path: "/api/demo/producer/status",
+        displayName: "Check admin status",
+        commandName: "check-status",
+        commandOptions: new HttpCommandOptions
+        {
+            Method = HttpMethod.Get,
+            Description = "Report connected players, pending approvals, and called squares.",
+            ResultMode = HttpCommandResultMode.Json
+        })
     .WithHttpCommand(
         path: "/api/demo/producer/squares/import",
         displayName: "Add bingo square",

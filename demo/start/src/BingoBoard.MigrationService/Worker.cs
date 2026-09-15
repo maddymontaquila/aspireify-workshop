@@ -36,6 +36,8 @@ public class Worker(
         }
         catch (Exception ex)
         {
+            Environment.ExitCode = 1;
+            activity?.SetStatus(ActivityStatusCode.Error, ex.Message);
             activity?.AddException(ex);
             throw;
         }

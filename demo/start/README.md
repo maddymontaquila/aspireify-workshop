@@ -19,6 +19,8 @@ start/
 
 `BingoBoard.ServiceDefaults` is present because every checkpoint shares this source tree. It remains inactive in the starting application and the first two checkpoints; checkpoint 03 enables it through configuration.
 
+The optional nginx Dockerfile and proxy configuration are used by [checkpoint 04](../checkpoints/04-compose/README.md), not by this manual startup path. The .NET projects use SDK container publishing without Dockerfiles. Vite requires its backend URL when serving locally, but building static assets does not require a running backend.
+
 The running application has five resources:
 
 | Resource | Purpose | Fixed local port |
@@ -76,7 +78,7 @@ export Authentication__AdminPassword="admin"
 
 ### 3. Run migrations and seed data
 
-The database must be accepting connections before this command runs:
+Start the database before running this command. The worker uses bounded Npgsql transient retries if PostgreSQL is still initializing:
 
 ```bash
 dotnet run --project src/BingoBoard.MigrationService
